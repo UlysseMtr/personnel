@@ -27,3 +27,13 @@ public class TestEmploye {
 		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty");
 		assertEquals("Bouchard", employe.getNom());
 	}
+	
+	@Test
+	void PrenomEmploye() throws SauvegardeImpossible
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty");
+		assertEquals("Gérard", employe.getPrenom());
+	}
+	
+	
