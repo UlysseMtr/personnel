@@ -19,3 +19,11 @@ public class TestEmploye {
 		assertEquals("g.bouchard@gmail.com", employe.getMail());
 		assertEquals(1, employe.checkPassword("azerty"));
 	}
+	
+	@Test
+	void NomEmploye() throws SauvegardeImpossible
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty");
+		assertEquals("Bouchard", employe.getNom());
+	}
