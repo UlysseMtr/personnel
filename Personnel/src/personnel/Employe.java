@@ -1,5 +1,5 @@
 package personnel;
-
+import java.time.LocalDate;
 import java.io.Serializable;
 
 /**
@@ -16,8 +16,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	private String nom, prenom, password, mail;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
+	private LocalDate dateArrivee = LocalDate.of(0000, 01, 01);
+	private LocalDate dateDepart = LocalDate.of(0000, 01, 01);
 	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password)
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -25,6 +27,8 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 		this.mail = mail;
 		this.ligue = ligue;
+		this.dateArrivee = (dateArrivee != null) ? dateArrivee : LocalDate.of(0, 1, 1);
+		this.dateDepart = (dateDepart != null) ? dateDepart : LocalDate.of(0, 1, 1);
 	}
 	
 	/**
@@ -166,6 +170,14 @@ public class Employe implements Serializable, Comparable<Employe>
 		else
 			throw new ImpossibleDeSupprimerRoot();
 	}
+	
+	public LocalDate getDateArrivee() {
+        return dateArrivee;
+    }
+	
+	public LocalDate getDateDepart() {
+        return dateDepart;
+    }
 
 	@Override
 	public int compareTo(Employe autre)
