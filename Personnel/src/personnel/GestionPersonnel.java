@@ -97,8 +97,8 @@ public class GestionPersonnel implements Serializable
 	}
 	
 	public Employe addEmploye(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail,
-		String password, String statut, LocalDate dateArrv, LocalDate dateDep) {
-		Employe employe = new Employe(this, ligue, nom, prenom, mail, password, statut, dateArrv, dateDep);
+		String password) {
+		Employe employe = new Employe(this, ligue, nom, prenom, mail, password);
 		employes.add(employe);
 		return employe;
 		}

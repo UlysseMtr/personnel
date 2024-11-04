@@ -10,14 +10,14 @@ public class TestEmploye {
 	GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
 	
 	@Test
-	void createEmploye() throws SauvegardeImpossible
+	void AddEmploye() throws SauvegardeImpossible
 	{
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
 		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty");
 		assertEquals("Bouchard", employe.getNom());
 		assertEquals("Gérard", employe.getPrenom());
 		assertEquals("g.bouchard@gmail.com", employe.getMail());
-		assertEquals(1, employe.checkPassword("azerty"));
+		assertEquals(true, employe.checkPassword("azerty"));
 	}
 	
 	@Test
@@ -50,5 +50,15 @@ public class TestEmploye {
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
 		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty");
 		assertEquals("azerty", employe.getPassword());
+	}
+	
+	@Test
+	void deleteEmploye() throws SauvegardeImpossible
+	{
+		Employe employe;
+		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
+		employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty");
+		employe.remove();
+		assertFalse(ligue.getEmployes().contains(employe));
 	}
 }
