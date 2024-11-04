@@ -20,6 +20,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	private LocalDate dateDepart = LocalDate.of(0000, 01, 01);
 	
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, String status, LocalDate dateArrivee, LocalDate dateDepart)
+	throws ExceptionDate
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -28,9 +29,21 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.ligue = ligue;
 		this.password = password;
 		this.setStatus(status);
-		this.dateArrivee = (dateArrivee != null) ? dateArrivee : LocalDate.of(0, 1, 1);
-		this.dateDepart = (dateDepart != null) ? dateDepart : LocalDate.of(0, 1, 1);
+		if (dateDepart.isBefore(dateArrivee)) throw new ExceptionDate();
+		this.dateArrivee = dateArrivee;
+		this.dateDepart = dateDepart;
 	}
+	
+	public Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password)
+	{
+		this.gestionPersonnel = gestionPersonnel;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.mail = mail;
+		this.ligue = ligue;
+		this.password = password;
+	}
+	
 	
 	
 	
@@ -183,14 +196,15 @@ public class Employe implements Serializable, Comparable<Employe>
     }
 	
 	
-	public void setDateArrivee(LocalDate dateArrive)
+	public void setDateArrivee(LocalDate dateArrivee)
 			 throws ExceptionDate
 			 {
-				 if (dateArrive == null  || dateDepart.isBefore(dateArrivee)) {
+				 if (dateArrivee == null  || dateDepart.isBefore(dateArrivee)) {
 			            throw new ExceptionDate();
 			        }
 				 else {
-				this.dateArrivee = dateArrive;}
+				 
+				this.dateArrivee = dateArrivee;}
 			 }
 	
 	 public void setDateDepart(LocalDate dateDepart)
