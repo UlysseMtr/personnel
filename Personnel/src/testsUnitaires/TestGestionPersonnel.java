@@ -23,7 +23,7 @@ public class TestGestionPersonnel {
 	void addEmploye() throws SauvegardeImpossible {
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
 		Employe employe;
-		employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty");
+		employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30));
 		assertEquals(employe, ligue.getEmployes().first());
 	}
 	

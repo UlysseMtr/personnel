@@ -22,7 +22,7 @@ public class GestionPersonnel implements Serializable
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
 	private SortedSet<Employe> employes;	
-	private Employe root = new Employe(this, null, "root", "", "", "toor");
+	private Employe root = new Employe(this, null, "root", "", "", "toor", null, null, null);
 	public final static int SERIALIZATION = 1, JDBC = 2, 
 			TYPE_PASSERELLE = SERIALIZATION;  
 	private static Passerelle passerelle = TYPE_PASSERELLE == JDBC ? new jdbc.JDBC() : new serialisation.Serialization();	
@@ -97,8 +97,8 @@ public class GestionPersonnel implements Serializable
 	}
 	
 	public Employe addEmploye(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail,
-		String password) {
-		Employe employe = new Employe(this, ligue, nom, prenom, mail, password);
+		String password, LocalDate DateArrivee, LocalDate DateDepart) {
+		Employe employe = new Employe(this, ligue, nom, prenom, mail, password, DateArrivee, DateDepart);
 		employes.add(employe);
 		return employe;
 		}

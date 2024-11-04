@@ -1,6 +1,9 @@
 package testsUnitaires;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 
 import personnel.*;
@@ -20,14 +23,14 @@ class testLigue
 	void addEmploye() throws SauvegardeImpossible
 	{
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
-		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty"); 
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
 		assertEquals(employe, ligue.getEmployes().first());
 	}
 	
 	@Test
 	void setEmploye() throws SauvegardeImpossible {
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
-		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty"); 
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty" , "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
 		employe.setNom("test");
 		assertEquals("test" , employe.getNom());
 	}
@@ -49,7 +52,7 @@ class testLigue
 	@Test
 	void getAdministrator() throws SauvegardeImpossible {
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
-		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty"); 
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
 		ligue.setAdministrateur(employe);
 		assertEquals(employe, ligue.getAdministrateur());
 	}
@@ -58,7 +61,7 @@ class testLigue
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
 		Employe employe;
 			 
-			employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty");
+			employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30));
 			
 			ligue.setAdministrateur(employe);
 			assertEquals(employe, ligue.getAdministrateur());
@@ -70,7 +73,6 @@ class testLigue
 			assertEquals(gestionPersonnel.getRoot() , ligue.getAdministrateur());
 			
 	}
-	
 	
 	@Test
 	void deleteLigue() throws SauvegardeImpossible {
