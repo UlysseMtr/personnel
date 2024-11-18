@@ -2,6 +2,8 @@ package commandLine;
 
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import commandLineMenus.List;
@@ -96,10 +98,19 @@ public class LigueConsole
 	{
 		return new Option("ajouter un employé", "a",
 				() -> 
+		
 				{
+					try {
 					ligue.addEmploye(getString("nom : "), 
 						getString("prenom : "), getString("mail : "), 
-						getString("password : "));
+						getString("password : ") , getString("Donner le status") , LocalDate.parse(getString("Saisir date arriver")) , LocalDate.parse(getString("Saisir date depart")));
+					}catch(ExceptionDate e) {
+						e.printStackTrace();
+						
+					}
+					catch(DateTimeParseException e) {
+						System.out.println("Veuillez saisir un bon format de date ex: aaaa-mm-jj");
+					}
 				}
 		);
 	}
@@ -109,11 +120,21 @@ public class LigueConsole
 		Menu menu = new Menu("Gérer les employés de " + ligue.getNom(), "e");
 		menu.add(afficherEmployes(ligue));
 		menu.add(ajouterEmploye(ligue));
+		menu.add(selectEmploye(ligue));
+		menu.addBack("q");
+		return menu;
+	}
+	
+	private Menu editerEmployer(Ligue ligue , Employe employe) {
+		Menu menu = new Menu("Gerer :" + employe.getNom());
 		menu.add(modifierEmploye(ligue));
 		menu.add(supprimerEmploye(ligue));
 		menu.addBack("q");
 		return menu;
 	}
+	
+	//menu.add(modifierEmploye(ligue));
+	//menu.add(supprimerEmploye(ligue));
 
 	private List<Employe> supprimerEmploye(final Ligue ligue)
 	{
@@ -141,4 +162,12 @@ public class LigueConsole
 		return new Option("Supprimer", "d", () -> {ligue.remove();});
 	}
 	
-}
+	private Option selectEmploye(Ligue ligue)
+	{
+		return new List<>("Selectionner un employe", "n", 
+				() -> new ArrayList<>(ligue.getEmployes()),
+				(nb) -> editerEmployer(ligue , nb));}
+				;
+	}
+	
+
