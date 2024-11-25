@@ -129,9 +129,15 @@ public class LigueConsole
 		Menu menu = new Menu("Gerer :" + employe.getNom());
 		menu.add(modifierEmploye(employe));
 		menu.add(supprimerEmploye(employe));
+		menu.add(changerAdmin(employe));
 		menu.setAutoBack(true);
 		menu.addBack("q");
 		return menu;
+	}
+	
+	
+	private Option changerAdmin(final Employe employe) {
+		return new Option("Nommer l'administrateur", "w", () -> employe.getLigue().setAdministrateur(employe));
 	}
 	
 	//menu.add(modifierEmploye(ligue));
