@@ -38,32 +38,37 @@ public class EmployeConsole
 	}
 	
 	private Option modifierDateArrivee(Employe employe) {
-		return new Option("Changer date d'arriver", "a",
-				() -> 
-				{
-					try {
-						employe.setDateArrivee(LocalDate.parse(getString("Nouvelle date")));
-					} catch (ExceptionDate e) {
-						System.out.println("Les dates ne sont pas cohérentes : la date de départ ne peut pas être antérieure à la date d'arrivée.");
-					}
-					catch (DateTimeParseException s) {
-						System.out.println("Merci de fournir la date dans le format suivant : AAAA-MM-JJ.");			}
-				}
-		);}
-	
+	    return new Option(
+	        "Changer date d'arrivée",
+	        "a",
+	        () -> {
+	            try {
+	                employe.setDateArrivee(LocalDate.parse(getString("Nouvelle date : ")));
+	            } catch (ExceptionDate e) {
+	                System.out.println("Les dates ne sont pas cohérentes : la date de départ ne peut pas être antérieure à la date d'arrivée.");
+	            } catch (DateTimeParseException e) {
+	                System.out.println("Merci de fournir la date dans le format suivant : AAAA-MM-JJ.");
+	            }
+	        }
+	    );
+	}
+
 	private Option modifierDateDepart(Employe employe) {
-		return new Option("Changer date Depart", "d",
-				() -> 
-				{
-					try {
-						employe.setDateDepart(LocalDate.parse(getString("Nouvelle date")));
-					} catch (ExceptionDate e) {
-						System.out.println("Les dates ne sont pas cohérentes : la date de départ ne peut pas être antérieure à la date d'arrivée.");
-					}
-					catch (DateTimeParseException s) {
-						System.out.println("Merci de fournir la date dans le format suivant : AAAA-MM-JJ.");			}
-				}
-		);}
+	    return new Option(
+	        "Changer date de départ",
+	        "d",
+	        () -> {
+	            try {
+	                employe.setDateDepart(LocalDate.parse(getString("Nouvelle date : ")));
+	            } catch (ExceptionDate e) {
+	                System.out.println("Les dates ne sont pas cohérentes : la date de départ ne peut pas être antérieure à la date d'arrivée.");
+	            } catch (DateTimeParseException e) {
+	                System.out.println("Merci de fournir la date dans le format suivant : AAAA-MM-JJ.");
+	            }
+	        }
+	    );
+	}
+
 
 	private Option changerNom(final Employe employe)
 	{
