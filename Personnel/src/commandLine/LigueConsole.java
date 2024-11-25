@@ -105,7 +105,7 @@ public class LigueConsole
 						getString("prenom : "), getString("mail : "), 
 						getString("password : ") , getString("Donner le status") , LocalDate.parse(getString("Saisir date arriver")) , LocalDate.parse(getString("Saisir date depart")));
 					}catch(ExceptionDate e) {
-						e.printStackTrace();
+						System.out.println("Date arriver est avant la date de départ");
 						
 					}
 					catch(DateTimeParseException e) {
@@ -130,7 +130,7 @@ public class LigueConsole
 		menu.add(modifierEmploye(employe));
 		menu.add(supprimerEmploye(employe));
 		menu.add(changerAdmin(employe));
-		menu.setAutoBack(true);
+		
 		menu.addBack("q");
 		return menu;
 	}
@@ -155,7 +155,7 @@ public class LigueConsole
 
 	private Option modifierEmploye(final Employe employe)
 	{
-		return new Option("Modifier Employe" , "c" , () -> employeConsole.editerEmploye());
+		return employeConsole.editerEmploye(employe);
 	}
 	
 	private Option supprimer(Ligue ligue)

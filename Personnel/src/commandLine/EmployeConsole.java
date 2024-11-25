@@ -2,10 +2,14 @@ package commandLine;
 
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 import commandLineMenus.ListOption;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
 import personnel.Employe;
+import personnel.ExceptionDate;
 
 public class EmployeConsole 
 {
@@ -27,9 +31,41 @@ public class EmployeConsole
 			menu.add(changerPrenom(employe));
 			menu.add(changerMail(employe));
 			menu.add(changerPassword(employe));
+			menu.add(modifierDateArrivee(employe));
+			menu.add(modifierDateDepart(employe));
 			menu.addBack("q");
 			return menu;
 	}
+	
+	
+	private Option modifierDateArrivee(Employe employe) {
+		return new Option("Changer date d'arriver", "a",
+				() -> 
+				{
+					try {
+						employe.setDateArrivee(LocalDate.parse(getString("Nouvelle date")));
+					} catch (ExceptionDate e) {
+						System.out.println("Les dates ne sont pas cohérentes : la date de départ ne peut pas être antérieure à la date d'arrivée.");
+					}
+					catch (DateTimeParseException s) {
+						System.out.println("Merci de fournir la date dans le format suivant : AAAA-MM-JJ.");			}
+				}
+		);}
+	
+	private Option modifierDateDepart(Employe employe) {
+		return new Option("Changer date Depart", "d",
+				() -> 
+				{
+					try {
+						employe.setDateDepart(LocalDate.parse(getString("Nouvelle date")));
+					} catch (ExceptionDate e) {
+						System.out.println("Les dates ne sont pas cohérentes : la date de départ ne peut pas être antérieure à la date d'arrivée.");
+					}
+					catch (DateTimeParseException s) {
+						System.out.println("Merci de fournir la date dans le format suivant : AAAA-MM-JJ.");			}
+				}
+		);}
+	
 
 	private Option changerNom(final Employe employe)
 	{
