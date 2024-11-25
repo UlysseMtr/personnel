@@ -16,3 +16,4 @@ CREATE TABLE Employe(
    PRIMARY KEY(id_employe),
    FOREIGN KEY(id_ligue) REFERENCES Ligue(id_ligue)
 );
+

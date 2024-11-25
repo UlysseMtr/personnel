@@ -37,7 +37,6 @@ public class EmployeConsole
 			return menu;
 	}
 	
-	
 	private Option modifierDateArrivee(Employe employe) {
 		return new Option("Changer date d'arriver", "a",
 				() -> 
@@ -65,7 +64,6 @@ public class EmployeConsole
 						System.out.println("Merci de fournir la date dans le format suivant : AAAA-MM-JJ.");			}
 				}
 		);}
-	
 
 	private Option changerNom(final Employe employe)
 	{

@@ -135,23 +135,15 @@ public class LigueConsole
 		return menu;
 	}
 	
-	
 	private Option changerAdmin(final Employe employe) {
 		return new Option("Nommer l'administrateur", "w", () -> employe.getLigue().setAdministrateur(employe));
 	}
-	
-	//menu.add(modifierEmploye(ligue));
-	//menu.add(supprimerEmploye(ligue));
 
 	private Option supprimerEmploye(final Employe employe)
 	{
 		return new Option("Supprimer Employe", "s" , () -> employe.remove());
 	}
 	
-	private List<Employe> changerAdministrateur(final Ligue ligue)
-	{
-		return null;
-	}		
 
 	private Option modifierEmploye(final Employe employe)
 	{
