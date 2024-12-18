@@ -43,6 +43,12 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		this.id = id;
 	}
 
+	
+	public int getIdLigue()
+	{
+		return id;
+	}
+	
 	/**
 	 * Retourne le nom de la ligue.
 	 * @return le nom de la ligue.
@@ -109,13 +115,21 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @return l'employé créé. 
 	 */
 
-	public Employe addEmploye(String nom, String prenom, String mail, String password, String status, LocalDate dateArrivee, LocalDate dateDepart)
-	throws ExceptionDate
+	public Employe addEmploye(int id, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, boolean admin)
 	{
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, status, dateArrivee, dateDepart);
+		Employe employe = new Employe(id, this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart, admin);
 		employes.add(employe);
 		return employe;
 	}
+	
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
+			throws ExceptionDate
+			{
+				Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
+				employes.add(employe);
+				return employe;
+			}
+	
 	
 	void remove(Employe employe)
 	{

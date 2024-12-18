@@ -97,8 +97,8 @@ public class GestionPersonnel implements Serializable
 	}
 	
 	public Employe addEmploye(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail,
-		String password, String status, LocalDate DateArrivee, LocalDate DateDepart) throws ExceptionDate {
-		Employe employe = new Employe(this, ligue, nom, prenom, mail, password, status, DateArrivee, DateDepart);
+		String password, boolean status, LocalDate DateArrivee, LocalDate DateDepart) throws ExceptionDate {
+		Employe employe = new Employe(this, ligue, nom, prenom, mail, password);
 		employes.add(employe);
 		return employe;
 		}

@@ -13,13 +13,15 @@ import java.io.Serializable;
 public class Employe implements Serializable, Comparable<Employe>
 {
 	private static final long serialVersionUID = 4795721718037994734L;
-	private String nom, prenom, password, mail, status;
+	private String nom, prenom, password, mail;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
 	private LocalDate dateArrivee = LocalDate.of(0000, 01, 01);
 	private LocalDate dateDepart = LocalDate.of(0000, 01, 01);
+	private int id;
 	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, String status, LocalDate dateArrivee, LocalDate dateDepart)
+	
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
 	throws ExceptionDate
 	{
 		this.gestionPersonnel = gestionPersonnel;
@@ -28,13 +30,28 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.mail = mail;
 		this.ligue = ligue;
 		this.password = password;
-		this.setStatus(status);
 		if (dateDepart.isBefore(dateArrivee)) throw new ExceptionDate();
 		this.dateArrivee = dateArrivee;
 		this.dateDepart = dateDepart;
 	}
 	
-	public Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password)
+	Employe(int id, GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, boolean admin)
+			{
+				this.id = id;
+				this.gestionPersonnel = gestionPersonnel;
+				this.nom = nom;
+				this.prenom = prenom;
+				this.mail = mail;
+				this.ligue = ligue;
+				this.password = password;
+				this.dateArrivee = dateArrivee;
+				this.dateDepart = dateDepart;
+				if (admin)
+					this.ligue.setAdministrateur(this);
+			}
+	
+	
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password)
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -237,12 +254,5 @@ public class Employe implements Serializable, Comparable<Employe>
 			res += ligue.toString();
 		return res + ")";
 	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
+	
 }

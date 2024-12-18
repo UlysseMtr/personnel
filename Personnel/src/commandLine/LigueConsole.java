@@ -103,7 +103,7 @@ public class LigueConsole
 					try {
 					ligue.addEmploye(getString("nom : "), 
 						getString("prenom : "), getString("mail : "), 
-						getString("password : ") , getString("Donner le status") , LocalDate.parse(getString("Saisir date arriver")) , LocalDate.parse(getString("Saisir date depart")));
+						getString("password : "), LocalDate.parse(getString("Saisir date arriver")) , LocalDate.parse(getString("Saisir date depart")));
 					}catch(ExceptionDate e) {
 						System.out.println("Date arriver est avant la date de départ");
 						
