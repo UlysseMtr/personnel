@@ -1,6 +1,6 @@
 package personnel;
-import java.time.LocalDate;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * Employé d'une ligue hébergée par la M2L. Certains peuvent 
@@ -59,6 +59,19 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.mail = mail;
 		this.ligue = ligue;
 		this.password = password;
+	}
+	
+	Employe(GestionPersonnel gestionPersonnel, String nom, String prenom, String mail, String password, LocalDate dateArrivee, Ligue ligue) throws SauvegardeImpossible
+	{
+		this.gestionPersonnel = gestionPersonnel;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.mail = mail;
+		this.password = password;
+		this.dateArrivee = dateArrivee;
+		this.dateDepart = null;
+		this.ligue = ligue;
+		this.id = gestionPersonnel.insert(this);
 	}
 	
 	
@@ -253,6 +266,14 @@ public class Employe implements Serializable, Comparable<Employe>
 		else
 			res += ligue.toString();
 		return res + ")";
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

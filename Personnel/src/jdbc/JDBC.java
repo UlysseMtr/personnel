@@ -1,13 +1,17 @@
 package jdbc;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import personnel.*;
+import personnel.Employe;
+import personnel.GestionPersonnel;
+import personnel.Ligue;
+import personnel.Passerelle;
+import personnel.SauvegardeImpossible;
 
 public class JDBC implements Passerelle 
 {
@@ -94,13 +98,21 @@ public class JDBC implements Passerelle
 		try 
 		{
 			PreparedStatement instruction;
-			instruction = connection.prepareStatement("insert into employe (prenomEmploye, nomEmploye, mail, passwd, datearv, datedepart, Admin, ID_Ligue) values(?)", Statement.RETURN_GENERATED_KEYS);
+			instruction = connection.prepareStatement("insert into employe (prenomEmploye, nomEmploye, mail, passwd, datearv, datedepart, Admin, ID_Ligue) values(?)" + 
+			"values(?, ?, ?, ?, ?, ?, ?)",
+			Statement.RETURN_GENERATED_KEYS);
+			
 			instruction.setString(1, employe.getPrenom());	
 			instruction.setString(2, employe.getNom());	
 			instruction.setString(3, employe.getMail());	
 			instruction.setString(4, employe.getPassword());	
 			instruction.setString(5, employe.getDateArrivee().toString());	
-			instruction.setString(6, employe.getDateDepart().toString());	
+
+			if (employe.getDateDepart() != null)
+				instruction.setString(6, employe.getDateDepart().toString());    
+			else
+				instruction.setNull(6, java.sql.Types.VARCHAR);
+				
 			instruction.setBoolean(7, employe.estAdmin(employe.getLigue()));
 			instruction.setInt(8, employe.getLigue().getIdLigue());	
 			instruction.executeUpdate();

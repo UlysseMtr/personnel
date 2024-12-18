@@ -1,10 +1,10 @@
 package personnel;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.time.LocalDate;
 
 /**
  * Gestion du personnel. Un seul objet de cette classe existe.
@@ -24,7 +24,7 @@ public class GestionPersonnel implements Serializable
 	private SortedSet<Employe> employes;	
 	private Employe root = new Employe(this, null, "root", "", "", "toor");
 	public final static int SERIALIZATION = 1, JDBC = 2, 
-			TYPE_PASSERELLE = JDBC;  
+			TYPE_PASSERELLE = SERIALIZATION;  
 	private static Passerelle passerelle = TYPE_PASSERELLE == JDBC ? new jdbc.JDBC() : new serialisation.Serialization();	
 	
 	/**
@@ -113,6 +113,11 @@ public class GestionPersonnel implements Serializable
 		return passerelle.insert(ligue);
 	}
 
+	public int insert(Employe employe) throws SauvegardeImpossible
+	{
+		return passerelle.insert(employe);
+	}
+
 	/**
 	 * Retourne le root (super-utilisateur).
 	 * @return le root.
@@ -121,5 +126,11 @@ public class GestionPersonnel implements Serializable
 	public Employe getRoot()
 	{
 		return root;
+	}
+
+	public void addRoot(String nom, String prenom, String mail, String password) throws SauvegardeImpossible
+	{
+		LocalDate dateArrivee = LocalDate.now();
+		root = new Employe(this, nom, prenom, mail, password, dateArrivee, null);
 	}
 }

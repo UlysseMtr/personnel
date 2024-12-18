@@ -73,7 +73,6 @@ public class LigueConsole
 		Menu menu = new Menu("Editer " + ligue.getNom());
 		menu.add(afficher(ligue));
 		menu.add(gererEmployes(ligue));
-		//menu.add(changerAdministrateur(ligue));
 		menu.add(changerNom(ligue));
 		menu.add(supprimer(ligue));
 		menu.addBack("q");
@@ -105,11 +104,11 @@ public class LigueConsole
 						getString("prenom : "), getString("mail : "), 
 						getString("password : "), LocalDate.parse(getString("Saisir date arriver")) , LocalDate.parse(getString("Saisir date depart")));
 					}catch(ExceptionDate e) {
-						System.out.println("Date arriver est avant la date de départ");
+						System.out.println("La date d'arrivée est avant la date de départ");
 						
 					}
 					catch(DateTimeParseException e) {
-						System.out.println("Veuillez saisir un bon format de date ex: aaaa-mm-jj");
+						System.out.println("Format de date invalide. Veuillez saisir un bon format de date ex: AAAA-MM-JJ");
 					}
 				}
 		);
@@ -160,7 +159,6 @@ public class LigueConsole
 		return new List<>("Selectionner un employe", "n", 
 				() -> new ArrayList<>(ligue.getEmployes()),
 				(nb) -> editerEmployer(nb));}
-				;
 	}
 	
 
