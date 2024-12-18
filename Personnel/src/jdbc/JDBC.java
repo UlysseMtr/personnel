@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 import personnel.Employe;
 import personnel.GestionPersonnel;
@@ -37,20 +38,39 @@ public class JDBC implements Passerelle
 	@Override
 	public GestionPersonnel getGestionPersonnel() 
 	{
-		GestionPersonnel gestionPersonnel = new GestionPersonnel();
-		try 
-		{
-			String requete = "select * from ligue";
-			Statement instruction = connection.createStatement();
-			ResultSet ligues = instruction.executeQuery(requete);
-			while (ligues.next())
-				gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
-		}
-		catch (SQLException e)
-		{
-			System.out.println(e);
-		}
-		return gestionPersonnel;
+	    GestionPersonnel gestionPersonnel = new GestionPersonnel();
+	    try 
+	    {
+	        // Lecture du root
+	        String requeteRoot = "select * from employe where ID_Ligue is null";
+	        Statement instructionRoot = connection.createStatement();
+	        ResultSet root = instructionRoot.executeQuery(requeteRoot);
+	        if (root.next())
+	        {
+	            Employe rootEmploye = new Employe(gestionPersonnel, 
+	                root.getInt("id"),
+	                root.getString("nomEmploye"),
+	                root.getString("prenomEmploye"),
+	                root.getString("mail"),
+	                root.getString("passwd"),
+	                LocalDate.parse(root.getString("datearv")),
+	                root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null,
+	                null);
+	            gestionPersonnel.addRoot(rootEmploye);
+	        }
+
+	        // Lecture des ligues (code existant)
+	        String requete = "select * from ligue";
+	        Statement instruction = connection.createStatement();
+	        ResultSet ligues = instruction.executeQuery(requete);
+	        while (ligues.next())
+	            gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
+	    }
+	    catch (SQLException e)
+	    {
+	        System.out.println(e);
+	    }
+	    return gestionPersonnel;
 	}
 
 	@Override

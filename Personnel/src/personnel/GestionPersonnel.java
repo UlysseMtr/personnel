@@ -133,4 +133,9 @@ public class GestionPersonnel implements Serializable
 		LocalDate dateArrivee = LocalDate.now();
 		root = new Employe(this, nom, prenom, mail, password, dateArrivee, null);
 	}
+	
+	public void addRoot(Employe employe)
+    {
+        root = employe;
+    }
 }

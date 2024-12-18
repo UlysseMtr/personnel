@@ -73,7 +73,20 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.ligue = ligue;
 		this.id = gestionPersonnel.insert(this);
 	}
-	
+	public Employe(GestionPersonnel gestionPersonnel, int id, String nom, String prenom, 
+			String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, 
+			Ligue ligue)
+	{
+		this.gestionPersonnel = gestionPersonnel;
+		this.id = id;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.mail = mail;
+		this.password = password;
+		this.dateArrivee = dateArrivee;
+		this.dateDepart = dateDepart;
+		this.ligue = ligue;
+	}
 	
 	
 	
