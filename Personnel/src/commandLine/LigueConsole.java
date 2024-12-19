@@ -82,7 +82,13 @@ public class LigueConsole
 	private Option changerNom(final Ligue ligue)
 	{
 		return new Option("Renommer", "r", 
-				() -> {ligue.setNom(getString("Nouveau nom : "));});
+				() -> {
+					try {
+						ligue.setNom(getString("Nouveau nom : "));
+					} catch (SauvegardeImpossible e) {
+						System.err.println("Impossible de sauvegarder le nouveau nom : " + e.getMessage());
+					}
+				});
 	}
 
 	private List<Ligue> selectionnerLigue()
@@ -135,7 +141,13 @@ public class LigueConsole
 	}
 	
 	private Option changerAdmin(final Employe employe) {
-		return new Option("Nommer l'administrateur", "w", () -> employe.getLigue().setAdministrateur(employe));
+		return new Option("Nommer l'administrateur", "w", () -> {
+			try {
+				employe.getLigue().setAdministrateur(employe);
+			} catch (SauvegardeImpossible e) {
+				System.err.println("Impossible de sauvegarder le changement d'administrateur : " + e.getMessage());
+			}
+		});
 	}
 
 	private Option supprimerEmploye(final Employe employe)
