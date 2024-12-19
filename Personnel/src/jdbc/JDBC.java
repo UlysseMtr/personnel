@@ -38,39 +38,39 @@ public class JDBC implements Passerelle
 	@Override
 	public GestionPersonnel getGestionPersonnel() 
 	{
-	    GestionPersonnel gestionPersonnel = new GestionPersonnel();
-	    try 
-	    {
-	        // Lecture du root
-	        String requeteRoot = "select * from employe where ID_Ligue is null";
-	        Statement instructionRoot = connection.createStatement();
-	        ResultSet root = instructionRoot.executeQuery(requeteRoot);
-	        if (root.next())
-	        {
-	            Employe rootEmploye = new Employe(gestionPersonnel, 
-	                root.getInt("id"),
-	                root.getString("nomEmploye"),
-	                root.getString("prenomEmploye"),
-	                root.getString("mail"),
-	                root.getString("passwd"),
-	                LocalDate.parse(root.getString("datearv")),
-	                root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null,
-	                null);
-	            gestionPersonnel.addRoot(rootEmploye);
-	        }
+		GestionPersonnel gestionPersonnel = new GestionPersonnel();
+		try 
+		{
+			// Lecture du root
+			String requeteRoot = "select * from employe where ID_Ligue is null";
+			Statement instructionRoot = connection.createStatement();
+			ResultSet root = instructionRoot.executeQuery(requeteRoot);
+			if (root.next())
+			{
+				Employe rootEmploye = new Employe(gestionPersonnel, 
+					root.getInt("id"),
+					root.getString("nomEmploye"),
+					root.getString("prenomEmploye"),
+					root.getString("mail"),
+					root.getString("passwd"),
+					LocalDate.parse(root.getString("datearv")),
+					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null,
+					null);
+				gestionPersonnel.addRoot(rootEmploye);
+			}
 
-	        // Lecture des ligues (code existant)
-	        String requete = "select * from ligue";
-	        Statement instruction = connection.createStatement();
-	        ResultSet ligues = instruction.executeQuery(requete);
-	        while (ligues.next())
-	            gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
-	    }
-	    catch (SQLException e)
-	    {
-	        System.out.println(e);
-	    }
-	    return gestionPersonnel;
+			// Lecture des ligues (code existant)
+			String requete = "select * from ligue";
+			Statement instruction = connection.createStatement();
+			ResultSet ligues = instruction.executeQuery(requete);
+			while (ligues.next())
+				gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
+		}
+		catch (SQLException e)
+		{
+			System.out.println(e);
+		}
+		return gestionPersonnel;
 	}
 
 	@Override
@@ -98,8 +98,11 @@ public class JDBC implements Passerelle
 		try 
 		{
 			PreparedStatement instruction;
-			instruction = connection.prepareStatement("insert into ligue (nom) values(?)", Statement.RETURN_GENERATED_KEYS);
-			instruction.setString(1, ligue.getNom());		
+			instruction = connection.prepareStatement(
+				"INSERT INTO ligue (nomLigue) VALUES(?)", 
+				Statement.RETURN_GENERATED_KEYS
+			);
+			instruction.setString(1, ligue.getNom());     
 			instruction.executeUpdate();
 			ResultSet id = instruction.getGeneratedKeys();
 			id.next();
