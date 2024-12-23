@@ -36,7 +36,7 @@ public class JDBC implements Passerelle
 	}
 	
 	@Override
-	public GestionPersonnel getGestionPersonnel() 
+	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible 
 	{
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try 
@@ -47,16 +47,15 @@ public class JDBC implements Passerelle
 			ResultSet root = instructionRoot.executeQuery(requeteRoot);
 			if (root.next())
 			{
-				Employe rootEmploye = new Employe(gestionPersonnel, 
+				gestionPersonnel.addRoot(
 					root.getInt("id"),
 					root.getString("nomEmploye"),
 					root.getString("prenomEmploye"),
 					root.getString("mail"),
 					root.getString("passwd"),
 					LocalDate.parse(root.getString("datearv")),
-					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null,
-					null);
-				gestionPersonnel.setRoot(rootEmploye);
+					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null
+				);
 			}
 
 			// Lecture des ligues (code existant)

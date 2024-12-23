@@ -33,7 +33,7 @@ public class GestionPersonnel implements Serializable
 	 * @return l'unique objet de type {@link GestionPersonnel}.
 	 */
 	
-	public static GestionPersonnel getGestionPersonnel()
+	public static GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible
 	{
 		if (gestionPersonnel == null)
 		{
@@ -129,10 +129,10 @@ public class GestionPersonnel implements Serializable
 	}
 
 	void addRoot(Employe employe)
-    {
-        root = employe;
-    }
-	
+	{
+		root = employe;
+	}
+
 	public void setRoot(Employe employe)
 	{
 		root = employe;
@@ -148,5 +148,13 @@ public class GestionPersonnel implements Serializable
 	{
 		if (passerelle != null)
 			passerelle.update(employe);
+	}
+
+	public Employe addRoot(int id, String nom, String prenom, String mail, String password, 
+		LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
+	{
+		Employe employe = new Employe(this, id, nom, prenom, mail, password, dateArrivee, dateDepart, null);
+		root = employe;
+		return employe;
 	}
 }
