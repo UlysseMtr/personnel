@@ -152,7 +152,14 @@ public class LigueConsole
 
 	private Option supprimerEmploye(final Employe employe)
 	{
-		return new Option("Supprimer Employe", "s" , () -> employe.remove());
+		return new Option("Supprimer Employe", "s", 
+			() -> {
+				try {
+					employe.remove();
+				} catch (SauvegardeImpossible e) {
+					System.err.println("Impossible de sauvegarder la suppression : " + e.getMessage());
+				}
+			});
 	}
 	
 

@@ -56,7 +56,7 @@ public class JDBC implements Passerelle
 					LocalDate.parse(root.getString("datearv")),
 					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null,
 					null);
-				gestionPersonnel.addRoot(rootEmploye);
+				gestionPersonnel.setRoot(rootEmploye);
 			}
 
 			// Lecture des ligues (code existant)
@@ -167,6 +167,42 @@ public class JDBC implements Passerelle
 				throw new SauvegardeImpossible(new Exception("Aucune ligue n'a été modifiée"));
 		} 
 		catch (SQLException exception) 
+		{
+			exception.printStackTrace();
+			throw new SauvegardeImpossible(exception);
+		}
+	}
+
+	@Override
+	public void update(Employe employe) throws SauvegardeImpossible 
+	{
+		try 
+		{
+			PreparedStatement instruction = connection.prepareStatement(
+				"UPDATE employe SET nomEmploye = ?, prenomEmploye = ?, mail = ?, " +
+				"passwd = ?, datearv = ?, datedepart = ?, Admin = ? " +
+				"WHERE ID_Employe = ?"
+			);
+			
+			instruction.setString(1, employe.getNom());
+			instruction.setString(2, employe.getPrenom());
+			instruction.setString(3, employe.getMail());
+			instruction.setString(4, employe.getPassword());
+			instruction.setString(5, employe.getDateArrivee().toString());
+			
+			if (employe.getDateDepart() != null)
+				instruction.setString(6, employe.getDateDepart().toString());
+			else
+				instruction.setNull(6, java.sql.Types.VARCHAR);
+				
+			instruction.setBoolean(7, employe.estAdmin(employe.getLigue()));
+			instruction.setInt(8, employe.getId());
+			
+			int lignesModifiees = instruction.executeUpdate();
+			if (lignesModifiees == 0)
+				throw new SauvegardeImpossible(new Exception("Aucun employé n'a été modifié"));
+		}
+		catch (SQLException exception)
 		{
 			exception.printStackTrace();
 			throw new SauvegardeImpossible(exception);

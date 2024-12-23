@@ -35,7 +35,7 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.dateDepart = dateDepart;
 	}
 	
-	Employe(int id, GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, boolean admin)
+	Employe(int id, GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, boolean admin) throws SauvegardeImpossible
 			{
 				this.id = id;
 				this.gestionPersonnel = gestionPersonnel;
@@ -61,18 +61,6 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 	}
 	
-	Employe(GestionPersonnel gestionPersonnel, String nom, String prenom, String mail, String password, LocalDate dateArrivee, Ligue ligue) throws SauvegardeImpossible
-	{
-		this.gestionPersonnel = gestionPersonnel;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.mail = mail;
-		this.password = password;
-		this.dateArrivee = dateArrivee;
-		this.dateDepart = null;
-		this.ligue = ligue;
-		this.id = gestionPersonnel.insert(this);
-	}
 	public Employe(GestionPersonnel gestionPersonnel, int id, String nom, String prenom, 
 			String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, 
 			Ligue ligue)
@@ -87,6 +75,7 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.dateDepart = dateDepart;
 		this.ligue = ligue;
 	}
+	
 	
 	
 	
@@ -129,9 +118,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param nom le nouveau nom.
 	 */
 	
-	public void setNom(String nom)
+	public void setNom(String nom) throws SauvegardeImpossible
 	{
 		this.nom = nom;
+		gestionPersonnel.update(this);
 	}
 
 	/**
@@ -149,9 +139,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param prenom le nouveau prénom de l'employé. 
 	 */
 
-	public void setPrenom(String prenom)
+	public void setPrenom(String prenom) throws SauvegardeImpossible
 	{
 		this.prenom = prenom;
+		gestionPersonnel.update(this);
 	}
 
 	/**
@@ -169,9 +160,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param mail le nouveau mail de l'employé.
 	 */
 
-	public void setMail(String mail)
+	public void setMail(String mail) throws SauvegardeImpossible
 	{
 		this.mail = mail;
+		gestionPersonnel.update(this);
 	}
 
 	/**
@@ -192,9 +184,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param password le nouveau password de l'employé. 
 	 */
 	
-	public void setPassword(String password)
+	public void setPassword(String password) throws SauvegardeImpossible
 	{
-		this.password= password;
+		this.password = password;
+		gestionPersonnel.update(this);
 	}
 	
 	public String getPassword()
@@ -215,9 +208,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Supprime l'employé. Si celui-ci est un administrateur, le root
 	 * récupère les droits d'administration sur sa ligue.
-	 */
-	
-	public void remove()
+		 * @throws SauvegardeImpossible 
+		 */
+		
+		public void remove() throws SauvegardeImpossible
 	{
 		Employe root = gestionPersonnel.getRoot();
 		if (this != root)
@@ -239,25 +233,16 @@ public class Employe implements Serializable, Comparable<Employe>
     }
 	
 	
-	public void setDateArrivee(LocalDate dateArrivee)
-			 throws ExceptionDate
+	public void setDateArrivee(LocalDate dateArrivee) throws SauvegardeImpossible
 			 {
-				 if (dateArrivee == null  || dateDepart.isBefore(dateArrivee)) {
-			            throw new ExceptionDate();
-			        }
-				 else {
-				 
-				this.dateArrivee = dateArrivee;}
+				 this.dateArrivee = dateArrivee;
+				 gestionPersonnel.update(this);
 			 }
 	
-	 public void setDateDepart(LocalDate dateDepart)
-			 throws ExceptionDate
+	 public void setDateDepart(LocalDate dateDepart) throws SauvegardeImpossible
 			 {
-				 if (dateDepart == null || dateDepart.isBefore(dateArrivee)) {
-			            throw new ExceptionDate();
-			        }
-				 else {
-				this.dateDepart = dateDepart;}
+				 this.dateDepart = dateDepart;
+				 gestionPersonnel.update(this);
 			 }
 			
 	

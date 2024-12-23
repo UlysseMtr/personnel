@@ -70,7 +70,6 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		gestionPersonnel.update(this);
 	}
 
-
 	/**
 	 * Retourne l'administrateur de la ligue.
 	 * @return l'administrateur de la ligue.
@@ -98,7 +97,6 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		gestionPersonnel.update(this);
 	}
 
-
 	/**
 	 * Retourne les employés de la ligue.
 	 * @return les employés de la ligue dans l'ordre alphabétique.
@@ -117,9 +115,10 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @param mail l'adresse mail de l'employé.
 	 * @param password le password de l'employé.
 	 * @return l'employé créé. 
-	 */
-
-	public Employe addEmploye(int id, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, boolean admin)
+		 * @throws SauvegardeImpossible 
+		 */
+	 
+		public Employe addEmploye(int id, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, boolean admin) throws SauvegardeImpossible
 	{
 		Employe employe = new Employe(id, this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart, admin);
 		employes.add(employe);

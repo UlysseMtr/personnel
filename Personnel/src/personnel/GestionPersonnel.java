@@ -128,20 +128,25 @@ public class GestionPersonnel implements Serializable
 		return root;
 	}
 
-	public void addRoot(String nom, String prenom, String mail, String password) throws SauvegardeImpossible
-	{
-		LocalDate dateArrivee = LocalDate.now();
-		root = new Employe(this, nom, prenom, mail, password, dateArrivee, null);
-	}
-	
-	public void addRoot(Employe employe)
+	void addRoot(Employe employe)
     {
         root = employe;
     }
 	
+	public void setRoot(Employe employe)
+	{
+		root = employe;
+	}
+
 	public void update(Ligue ligue) throws SauvegardeImpossible
 	{
-	    if (passerelle != null)
-	        passerelle.update(ligue);
+		if (passerelle != null)
+			passerelle.update(ligue);
+	}
+
+	public void update(Employe employe) throws SauvegardeImpossible
+	{
+		if (passerelle != null)
+			passerelle.update(employe);
 	}
 }
