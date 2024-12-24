@@ -38,6 +38,9 @@ public class JDBC implements Passerelle
 	@Override
 	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible 
 	{
+		if (connection == null)
+			return null;
+		
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try 
 		{
@@ -47,27 +50,51 @@ public class JDBC implements Passerelle
 			ResultSet root = instructionRoot.executeQuery(requeteRoot);
 			if (root.next())
 			{
-				gestionPersonnel.addRoot(
+				Employe rootEmploye = new Employe(
+					gestionPersonnel,
 					root.getInt("id"),
 					root.getString("nomEmploye"),
 					root.getString("prenomEmploye"),
 					root.getString("mail"),
 					root.getString("passwd"),
 					LocalDate.parse(root.getString("datearv")),
-					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null
+					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null,
+					null
 				);
+				gestionPersonnel.setRoot(rootEmploye);
 			}
 
-			// Lecture des ligues (code existant)
-			String requete = "select * from ligue";
+			String requete = "SELECT l.*, e.* FROM ligue l LEFT JOIN employe e ON l.ID_Ligue = e.ID_Ligue";
 			Statement instruction = connection.createStatement();
-			ResultSet ligues = instruction.executeQuery(requete);
-			while (ligues.next())
-				gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
+			ResultSet resultats = instruction.executeQuery(requete);
+			
+			Ligue ligueCourante = null;
+			while (resultats.next())
+			{
+				int idLigue = resultats.getInt("ID_Ligue");
+				if (ligueCourante == null || ligueCourante.getIdLigue() != idLigue)
+				{
+					ligueCourante = gestionPersonnel.addLigue(idLigue, resultats.getString("nomLigue"));
+				}
+				
+				if (resultats.getObject("id") != null)
+				{
+					ligueCourante.addEmploye(
+						resultats.getInt("id"),
+						resultats.getString("nomEmploye"),
+						resultats.getString("prenomEmploye"),
+						resultats.getString("mail"),
+						resultats.getString("passwd"),
+						LocalDate.parse(resultats.getString("datearv")),
+						resultats.getString("datedepart") != null ? LocalDate.parse(resultats.getString("datedepart")) : null,
+						resultats.getBoolean("Admin")
+					);
+				}
+			}
 		}
 		catch (SQLException e)
 		{
-			System.out.println(e);
+			return null;
 		}
 		return gestionPersonnel;
 	}
