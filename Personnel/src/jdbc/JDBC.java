@@ -38,63 +38,56 @@ public class JDBC implements Passerelle
 	@Override
 	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible 
 	{
-		if (connection == null)
-			return null;
-		
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try 
 		{
-			// Lecture du root
+			// Test lecture du root??
 			String requeteRoot = "select * from employe where ID_Ligue is null";
 			Statement instructionRoot = connection.createStatement();
 			ResultSet root = instructionRoot.executeQuery(requeteRoot);
 			if (root.next())
 			{
-				Employe rootEmploye = new Employe(
-					gestionPersonnel,
+				gestionPersonnel.addRoot(
 					root.getInt("id"),
 					root.getString("nomEmploye"),
 					root.getString("prenomEmploye"),
 					root.getString("mail"),
 					root.getString("passwd"),
 					LocalDate.parse(root.getString("datearv")),
-					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null,
-					null
+					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null
 				);
-				gestionPersonnel.setRoot(rootEmploye);
 			}
-
-			String requete = "SELECT l.*, e.* FROM ligue l LEFT JOIN employe e ON l.ID_Ligue = e.ID_Ligue";
+			String requete = "SELECT l.*, e.* FROM ligue l INNER JOIN employe e ON l.ID_Ligue = e.ID_Ligue ORDER BY l.ID_Ligue";
 			Statement instruction = connection.createStatement();
 			ResultSet resultats = instruction.executeQuery(requete);
 			
 			Ligue ligueCourante = null;
+			int idLiguePrecedente = -1;
+			
 			while (resultats.next())
 			{
 				int idLigue = resultats.getInt("ID_Ligue");
-				if (ligueCourante == null || ligueCourante.getIdLigue() != idLigue)
+				if (idLigue != idLiguePrecedente)
 				{
 					ligueCourante = gestionPersonnel.addLigue(idLigue, resultats.getString("nomLigue"));
+					idLiguePrecedente = idLigue;
 				}
 				
-				if (resultats.getObject("id") != null)
-				{
-					ligueCourante.addEmploye(
-						resultats.getInt("id"),
-						resultats.getString("nomEmploye"),
-						resultats.getString("prenomEmploye"),
-						resultats.getString("mail"),
-						resultats.getString("passwd"),
-						LocalDate.parse(resultats.getString("datearv")),
-						resultats.getString("datedepart") != null ? LocalDate.parse(resultats.getString("datedepart")) : null,
-						resultats.getBoolean("Admin")
-					);
-				}
+				ligueCourante.addEmploye(
+					resultats.getInt("id"),
+					resultats.getString("nomEmploye"),
+					resultats.getString("prenomEmploye"),
+					resultats.getString("mail"),
+					resultats.getString("passwd"),
+					LocalDate.parse(resultats.getString("datearv")),
+					resultats.getString("datedepart") != null ? LocalDate.parse(resultats.getString("datedepart")) : null,
+					resultats.getBoolean("Admin")
+				);
 			}
 		}
 		catch (SQLException e)
 		{
-			return null;
+			throw new SauvegardeImpossible(e);
 		}
 		return gestionPersonnel;
 	}
