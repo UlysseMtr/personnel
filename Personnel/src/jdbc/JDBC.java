@@ -140,15 +140,17 @@ public class JDBC implements Passerelle
 		try 
 		{
 			PreparedStatement instruction;
-			instruction = connection.prepareStatement("insert into employe (prenomEmploye, nomEmploye, mail, passwd, datearv, datedepart, Admin, ID_Ligue) values(?)" + 
-			"values(?, ?, ?, ?, ?, ?, ?)",
-			Statement.RETURN_GENERATED_KEYS);
+			instruction = connection.prepareStatement(
+				"INSERT INTO employe (prenomEmploye, nomEmploye, mail, passwd, datearv, datedepart, Admin, ID_Ligue) " + 
+				"VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+				Statement.RETURN_GENERATED_KEYS
+			);
 			
-			instruction.setString(1, employe.getPrenom());	
-			instruction.setString(2, employe.getNom());	
-			instruction.setString(3, employe.getMail());	
-			instruction.setString(4, employe.getPassword());	
-			instruction.setString(5, employe.getDateArrivee().toString());	
+			instruction.setString(1, employe.getPrenom());    
+			instruction.setString(2, employe.getNom());    
+			instruction.setString(3, employe.getMail());    
+			instruction.setString(4, employe.getPassword());    
+			instruction.setString(5, employe.getDateArrivee().toString());    
 
 			if (employe.getDateDepart() != null)
 				instruction.setString(6, employe.getDateDepart().toString());    
@@ -156,7 +158,12 @@ public class JDBC implements Passerelle
 				instruction.setNull(6, java.sql.Types.VARCHAR);
 				
 			instruction.setBoolean(7, employe.estAdmin(employe.getLigue()));
-			instruction.setInt(8, employe.getLigue().getIdLigue());	
+			
+			if (employe.getLigue() != null)
+				instruction.setInt(8, employe.getLigue().getIdLigue());    
+			else
+				instruction.setNull(8, java.sql.Types.INTEGER);
+				
 			instruction.executeUpdate();
 			ResultSet id = instruction.getGeneratedKeys();
 			id.next();
