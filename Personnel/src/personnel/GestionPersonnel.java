@@ -96,13 +96,6 @@ public class GestionPersonnel implements Serializable
 		return ligue;
 	}
 	
-	public Employe addEmploye(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail,
-		String password, boolean status, LocalDate DateArrivee, LocalDate DateDepart) throws ExceptionDate {
-		Employe employe = new Employe(this, ligue, nom, prenom, mail, password);
-		employes.add(employe);
-		return employe;
-		}
-
 	void remove(Ligue ligue)
 	{
 		ligues.remove(ligue);
@@ -129,11 +122,6 @@ public class GestionPersonnel implements Serializable
 	}
 
 	void addRoot(Employe employe)
-	{
-		root = employe;
-	}
-
-	public void setRoot(Employe employe)
 	{
 		root = employe;
 	}
