@@ -145,4 +145,10 @@ public class GestionPersonnel implements Serializable
 		root = employe;
 		return employe;
 	}
+
+	public void delete(Employe employe) throws SauvegardeImpossible
+	{
+		if (passerelle != null)
+			passerelle.delete(employe);
+	}
 }
