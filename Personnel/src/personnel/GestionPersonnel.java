@@ -151,4 +151,10 @@ public class GestionPersonnel implements Serializable
 		if (passerelle != null)
 			passerelle.delete(employe);
 	}
+
+	public void delete(Ligue ligue) throws SauvegardeImpossible
+	{
+		if (passerelle != null)
+			passerelle.delete(ligue);
+	}
 }
