@@ -2,6 +2,7 @@ package personnel;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -149,6 +150,10 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	
 	public void remove() throws SauvegardeImpossible
 	{
+		for (Employe employe : new ArrayList<>(employes))
+		{
+			employe.remove();
+		}
 		gestionPersonnel.delete(this);
 		gestionPersonnel.remove(this);
 	}
