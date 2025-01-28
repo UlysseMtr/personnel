@@ -13,6 +13,7 @@ import personnel.GestionPersonnel;
 import personnel.Ligue;
 import personnel.Passerelle;
 import personnel.SauvegardeImpossible;
+import personnel.ExceptionDate;
 
 public class JDBC implements Passerelle 
 {
@@ -36,7 +37,7 @@ public class JDBC implements Passerelle
 	}
 	
 	@Override
-	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible 
+	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible, ExceptionDate 
 	{
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try 
