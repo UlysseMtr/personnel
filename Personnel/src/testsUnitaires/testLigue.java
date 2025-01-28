@@ -10,7 +10,11 @@ import personnel.*;
 
 class testLigue 
 {
-	GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+	GestionPersonnel gestionPersonnel;
+	
+	public testLigue() throws SauvegardeImpossible, ExceptionDate {
+		gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+	}
 	
 	@Test
 	void createLigue() throws SauvegardeImpossible
@@ -23,14 +27,14 @@ class testLigue
 	void addEmploye() throws SauvegardeImpossible, ExceptionDate
 	{
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
-		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
 		assertEquals(employe, ligue.getEmployes().first());
 	}
 	
 	@Test
 	void setEmploye() throws SauvegardeImpossible, ExceptionDate {
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
-		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty" , "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
 		employe.setNom("test");
 		assertEquals("test" , employe.getNom());
 	}
@@ -52,26 +56,20 @@ class testLigue
 	@Test
 	void getAdministrator() throws SauvegardeImpossible, ExceptionDate {
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
-		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30)); 
 		ligue.setAdministrateur(employe);
 		assertEquals(employe, ligue.getAdministrateur());
 	}
 	@Test
 	void deleteAndChangeAdmin() throws SauvegardeImpossible, ExceptionDate{
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
-		Employe employe;
-			 
-			employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30));
-			
-			ligue.setAdministrateur(employe);
-			assertEquals(employe, ligue.getAdministrateur());
-			
-			employe.remove();
-			assertFalse(ligue.getEmployes().contains(employe));
-		
-			assertFalse(ligue.getEmployes().contains(employe));
-			assertEquals(gestionPersonnel.getRoot() , ligue.getAdministrateur());
-			
+		Employe employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30));
+		ligue.setAdministrateur(employe);
+		assertEquals(employe, ligue.getAdministrateur());
+		employe.remove();
+		assertFalse(ligue.getEmployes().contains(employe));
+		assertFalse(ligue.getEmployes().contains(employe));
+		assertEquals(gestionPersonnel.getRoot(), ligue.getAdministrateur());
 	}
 	
 	@Test

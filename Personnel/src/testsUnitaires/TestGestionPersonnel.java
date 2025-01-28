@@ -8,9 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import personnel.*;
 
-public class TestGestionPersonnel {
+class TestGestionPersonnel {
 	
-	GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+	GestionPersonnel gestionPersonnel;
+	
+	public TestGestionPersonnel() throws SauvegardeImpossible, ExceptionDate {
+		gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+	}
 	
 	@Test 
 	void addLigue() throws SauvegardeImpossible {
@@ -20,10 +24,10 @@ public class TestGestionPersonnel {
 	}
 	
 	@Test 
-	void addEmploye() throws SauvegardeImpossible {
+	void addEmploye() throws SauvegardeImpossible, ExceptionDate {
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
 		Employe employe;
-		employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", "test", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30));
+		employe = ligue.addEmploye("Bouchard", "Gérard", "g.bouchard@gmail.com", "azerty", LocalDate.of(2023, 1, 1), LocalDate.of(2023, 12, 30));
 		assertEquals(employe, ligue.getEmployes().first());
 	}
 	
