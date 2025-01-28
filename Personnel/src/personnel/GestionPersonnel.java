@@ -121,11 +121,6 @@ public class GestionPersonnel implements Serializable
 		return root;
 	}
 
-	void addRoot(Employe employe)
-	{
-		root = employe;
-	}
-
 	public void update(Ligue ligue) throws SauvegardeImpossible
 	{
 		if (passerelle != null)
@@ -139,7 +134,7 @@ public class GestionPersonnel implements Serializable
 	}
 
 	public Employe addRoot(int id, String nom, String prenom, String mail, String password, 
-		LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
+		LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, ExceptionDate
 	{
 		Employe employe = new Employe(id, this, null, nom, prenom, mail, password, dateArrivee, dateDepart, true);
 		root = employe;

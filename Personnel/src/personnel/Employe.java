@@ -35,20 +35,23 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.dateDepart = dateDepart;
 	}
 	
-	Employe(int id, GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, boolean admin) throws SauvegardeImpossible
-			{
-				this.id = id;
-				this.gestionPersonnel = gestionPersonnel;
-				this.nom = nom;
-				this.prenom = prenom;
-				this.mail = mail;
-				this.ligue = ligue;
-				this.password = password;
-				this.dateArrivee = dateArrivee;
-				this.dateDepart = dateDepart;
-				if (admin)
-					this.ligue.setAdministrateur(this);
-			}
+	Employe(int id, GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, 
+		String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, boolean admin) 
+		throws SauvegardeImpossible, ExceptionDate
+	{
+		this.id = id;
+		this.gestionPersonnel = gestionPersonnel;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.mail = mail;
+		this.ligue = ligue;
+		this.password = password;
+		if (dateDepart.isBefore(dateArrivee)) throw new ExceptionDate();
+		this.dateArrivee = dateArrivee;
+		this.dateDepart = dateDepart;
+		if (admin && ligue != null)
+			this.ligue.setAdministrateur(this);
+	}
 	
 	
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password)
