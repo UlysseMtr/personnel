@@ -4,9 +4,9 @@ import commandLineMenus.Action;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
 import static commandLineMenus.rendering.examples.util.InOut.getString;
+import personnel.ExceptionDate;
 import personnel.GestionPersonnel;
 import personnel.SauvegardeImpossible;
-
 public class PersonnelConsole
 {
 	private GestionPersonnel gestionPersonnel;
@@ -74,7 +74,7 @@ public class PersonnelConsole
 		return ok;
 	}
 	
-	public static void main(String[] args) throws SauvegardeImpossible
+	public static void main(String[] args) throws SauvegardeImpossible, ExceptionDate
 	{
 		PersonnelConsole personnelConsole = 
 				new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
