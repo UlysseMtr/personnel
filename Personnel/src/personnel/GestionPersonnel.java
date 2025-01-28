@@ -141,6 +141,12 @@ public class GestionPersonnel implements Serializable
 		return employe;
 	}
 
+	public Employe addRoot(String nom, String prenom, String mail, String password, 
+		LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, ExceptionDate
+	{
+		return addRoot(-1, nom, prenom, mail, password, dateArrivee, dateDepart);
+	}
+
 	public void delete(Employe employe) throws SauvegardeImpossible
 	{
 		if (passerelle != null)
