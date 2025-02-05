@@ -42,7 +42,6 @@ public class JDBC implements Passerelle
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try
 		{
-			// Test lecture du root??
 			String requeteRoot = "select * from employe where ID_Ligue is null";
 			Statement instructionRoot = connection.createStatement();
 			ResultSet root = instructionRoot.executeQuery(requeteRoot);
@@ -57,6 +56,12 @@ public class JDBC implements Passerelle
 					LocalDate.parse(root.getString("datearv")),
 					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null
 				);
+			}
+			else
+			{
+				// Insertion du root si pas présent dans la base (Catégorie : Lecture Root)
+				gestionPersonnel.addRoot("root", "", "", "toor",
+					LocalDate.of(2000, 1, 1), LocalDate.of(2099, 12, 31));
 			}
 			String requete = "SELECT l.*, e.* FROM ligue l INNER JOIN employe e ON l.ID_Ligue = e.ID_Ligue ORDER BY l.ID_Ligue";
 			Statement instruction = connection.createStatement();
