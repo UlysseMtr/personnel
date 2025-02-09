@@ -1,6 +1,8 @@
 package personnel;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.SortedSet;
@@ -161,5 +163,24 @@ public class GestionPersonnel implements Serializable
 	{
 		if (passerelle != null)
 			passerelle.delete(ligue);
+	}
+
+	public void chargerRoot(ResultSet rootData) throws SQLException, SauvegardeImpossible, ExceptionDate
+	{
+		if (rootData.next()) {
+			addRoot(
+				rootData.getInt("id"),
+				rootData.getString("nomEmploye"),
+				rootData.getString("prenomEmploye"),
+				rootData.getString("mail"),
+				rootData.getString("passwd"),
+				LocalDate.parse(rootData.getString("datearv")),
+				rootData.getString("datedepart") != null ?
+					LocalDate.parse(rootData.getString("datedepart")) : null
+			);
+		} else {
+			addRoot("root", "", "", "toor",
+				LocalDate.of(2000, 1, 1), LocalDate.of(2099, 12, 31));
+		}
 	}
 }

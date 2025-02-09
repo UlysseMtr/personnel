@@ -45,23 +45,7 @@ public class JDBC implements Passerelle
 			String requeteRoot = "select * from employe where ID_Ligue is null";
 			Statement instructionRoot = connection.createStatement();
 			ResultSet root = instructionRoot.executeQuery(requeteRoot);
-			if (root.next())
-			{
-				gestionPersonnel.addRoot(
-					root.getInt("id"),
-					root.getString("nomEmploye"),
-					root.getString("prenomEmploye"),
-					root.getString("mail"),
-					root.getString("passwd"),
-					LocalDate.parse(root.getString("datearv")),
-					root.getString("datedepart") != null ? LocalDate.parse(root.getString("datedepart")) : null
-				);
-			}
-			else
-			{
-				gestionPersonnel.addRoot("root", "", "", "toor",
-					LocalDate.of(2000, 1, 1), LocalDate.of(2099, 12, 31));
-			}
+			gestionPersonnel.chargerRoot(root);
 
 			if (connection == null || connection.isClosed())
 			{
