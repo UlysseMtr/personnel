@@ -248,11 +248,6 @@ public class JDBC implements Passerelle
 	{
 		try
 		{
-			PreparedStatement deleteEmployes = connection.prepareStatement(
-				"DELETE FROM employe WHERE ID_Ligue = ?"
-			);
-			deleteEmployes.setInt(1, ligue.getIdLigue());
-			deleteEmployes.executeUpdate();
 			PreparedStatement deleteLigue = connection.prepareStatement(
 				"DELETE FROM ligue WHERE ID_Ligue = ?"
 			);
