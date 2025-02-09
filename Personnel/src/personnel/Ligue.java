@@ -129,12 +129,12 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	}
 
 	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
-			throws ExceptionDate
-			{
-				Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
-				employes.add(employe);
-				return employe;
-			}
+			throws ExceptionDate, SauvegardeImpossible
+	{
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
+		employes.add(employe);
+		return employe;
+	}
 
 
 	void remove(Employe employe)

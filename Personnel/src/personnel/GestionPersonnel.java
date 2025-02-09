@@ -44,12 +44,12 @@ public class GestionPersonnel implements Serializable
 		return gestionPersonnel;
 	}
 
-	public GestionPersonnel() throws ExceptionDate
+	public GestionPersonnel() throws ExceptionDate, SauvegardeImpossible
 	{
 		if (gestionPersonnel != null)
 			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
 		ligues = new TreeSet<>();
-		root = new Employe(this, null, "root", "", "", "toor",
+		new Employe(this, null, "root", "", "", "toor",
 			LocalDate.of(2000, 1, 1), LocalDate.of(2099, 12, 31));
 		gestionPersonnel = this;
 	}

@@ -115,6 +115,9 @@ public class LigueConsole
 					}
 					catch(DateTimeParseException e) {
 						System.out.println("Format de date invalide. Veuillez saisir un bon format de date ex: AAAA-MM-JJ");
+					} catch (SauvegardeImpossible e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 		);

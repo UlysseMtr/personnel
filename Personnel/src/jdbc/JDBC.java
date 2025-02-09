@@ -59,10 +59,15 @@ public class JDBC implements Passerelle
 			}
 			else
 			{
-				// Insertion du root si pas présent dans la base (Catégorie : Lecture Root)
 				gestionPersonnel.addRoot("root", "", "", "toor",
 					LocalDate.of(2000, 1, 1), LocalDate.of(2099, 12, 31));
 			}
+
+			if (connection == null || connection.isClosed())
+			{
+				throw new SQLException("La connexion à la base de données n'est pas établie");
+			}
+
 			String requete = "SELECT l.*, e.* FROM ligue l INNER JOIN employe e ON l.ID_Ligue = e.ID_Ligue ORDER BY l.ID_Ligue";
 			Statement instruction = connection.createStatement();
 			ResultSet resultats = instruction.executeQuery(requete);
@@ -146,8 +151,8 @@ public class JDBC implements Passerelle
 		try
 		{
 			PreparedStatement instruction;
-			instruction = connection.prepareStatement("insert into employe (prenomEmploye, nomEmploye, mail, passwd, datearv, datedepart, Admin, ID_Ligue) values(?)" +
-			"values(?, ?, ?, ?, ?, ?, ?)",
+			instruction = connection.prepareStatement("insert into employe (prenomEmploye, nomEmploye, mail, passwd, datearv, datedepart, Admin, ID_Ligue) " +
+			"values(?, ?, ?, ?, ?, ?, ?, ?)",
 			Statement.RETURN_GENERATED_KEYS);
 
 			instruction.setString(1, employe.getPrenom());
@@ -162,7 +167,10 @@ public class JDBC implements Passerelle
 				instruction.setNull(6, java.sql.Types.VARCHAR);
 
 			instruction.setBoolean(7, employe.estAdmin(employe.getLigue()));
-			instruction.setInt(8, employe.getLigue().getIdLigue());
+			if (employe.getLigue() == null)
+				instruction.setNull(8, java.sql.Types.INTEGER);
+			else
+				instruction.setInt(8, employe.getLigue().getIdLigue());
 			instruction.executeUpdate();
 			ResultSet id = instruction.getGeneratedKeys();
 			id.next();

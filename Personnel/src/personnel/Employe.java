@@ -22,7 +22,7 @@ public class Employe implements Serializable, Comparable<Employe>
 
 
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
-	throws ExceptionDate
+	throws ExceptionDate, SauvegardeImpossible
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -33,6 +33,13 @@ public class Employe implements Serializable, Comparable<Employe>
 		if (dateDepart.isBefore(dateArrivee)) throw new ExceptionDate();
 		this.dateArrivee = dateArrivee;
 		this.dateDepart = dateDepart;
+		if (ligue == null && gestionPersonnel.getRoot() == null) {
+			try {
+				gestionPersonnel.addRoot(nom, prenom, mail, password, dateArrivee, dateDepart);
+			} catch (SauvegardeImpossible e) {
+				throw new SauvegardeImpossible(e);
+			}
+		}
 	}
 
 	Employe(int id, GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom,
