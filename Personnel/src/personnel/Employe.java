@@ -66,7 +66,7 @@ public class Employe implements Serializable, Comparable<Employe>
 
 	public boolean estAdmin(Ligue ligue)
 	{
-		return ligue.getAdministrateur().getId() == this.getId();
+		return ligue.getAdministrateur() == this;
 	}
 
 	/**

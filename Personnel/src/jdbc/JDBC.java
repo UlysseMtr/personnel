@@ -218,13 +218,12 @@ public class JDBC implements Passerelle
 	@Override
 	public void update(Employe employe) throws SauvegardeImpossible
 	{
+		
 		try
+		
 		{
 			PreparedStatement instruction = connection.prepareStatement(
-				"UPDATE employe SET nomEmploye = ?, prenomEmploye = ?, mail = ?, " +
-				"passwd = ?, datearv = ?, datedepart = ?, Admin = ? " +
-				"WHERE id = ?"
-			);
+				"UPDATE employe SET nomEmploye = (?), prenomEmploye = (?), mail = (?), passwd = (?), datearv = (?), datedepart = (?), Admin = (?) WHERE id_employe = (?)");
 
 			instruction.setString(1, employe.getNom());
 			instruction.setString(2, employe.getPrenom());
@@ -236,13 +235,14 @@ public class JDBC implements Passerelle
 				instruction.setDate(6, java.sql.Date.valueOf(employe.getDateDepart()));
 			else
 				instruction.setNull(6, java.sql.Types.DATE);
-
-			instruction.setBoolean(7, employe.estAdmin(employe.getLigue()));
+			
+			instruction.setBoolean(7, false);
+			if(employe.getLigue() != null && employe.estAdmin(employe.getLigue())){
+				instruction.setBoolean(7, true);
+			}
 			instruction.setInt(8, employe.getId());
 
-			int lignesModifiees = instruction.executeUpdate();
-			if (lignesModifiees == 0)
-				throw new SauvegardeImpossible(new Exception("Aucun employé n'a été modifié"));
+			instruction.executeUpdate();
 		}
 		catch (SQLException exception)
 		{

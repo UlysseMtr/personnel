@@ -94,8 +94,14 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		Employe root = gestionPersonnel.getRoot();
 		if (administrateur != root && administrateur.getLigue() != this)
 			throw new DroitsInsuffisants();
+		
+		if (administrateur.getLigue() != null) {
+			Employe old = administrateur.getLigue().getAdministrateur();
+			this.administrateur = administrateur;
+			gestionPersonnel.update(old);
+		}
 		this.administrateur = administrateur;
-		gestionPersonnel.update(this);
+		gestionPersonnel.update(administrateur);
 	}
 
 	/**
@@ -124,7 +130,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 			LocalDate dateArrivee, LocalDate dateDepart, boolean admin)
 			throws SauvegardeImpossible, ExceptionDate
 	{
-		Employe employe = new Employe(-1, gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart, admin);
+		Employe employe = new Employe(id, gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart, admin);
 		employes.add(employe);
 		return employe;
 	}
