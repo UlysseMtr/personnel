@@ -46,13 +46,10 @@ public class JDBC implements Passerelle
 			Statement instructionRoot = connection.createStatement();
 			ResultSet root = instructionRoot.executeQuery(requeteRoot);
 			gestionPersonnel.chargerRoot(root);
-
-			if (connection == null || connection.isClosed())
-			{
-				throw new SQLException("La connexion à la base de données n'est pas établie");
-			}
-
-			String requete = "SELECT l.*, e.* FROM ligue l INNER JOIN employe e ON l.ID_Ligue = e.ID_Ligue ORDER BY l.ID_Ligue";
+			String requete = "SELECT l.*, e.*, l.ID_Admin as admin_id " +
+							"FROM ligue l " +
+							"INNER JOIN employe e ON l.ID_Ligue = e.ID_Ligue " +
+							"ORDER BY l.ID_Ligue";
 			Statement instruction = connection.createStatement();
 			ResultSet resultats = instruction.executeQuery(requete);
 
@@ -68,15 +65,16 @@ public class JDBC implements Passerelle
 					idLiguePrecedente = idLigue;
 				}
 
-				ligueCourante.addEmploye(
+				Employe employe = ligueCourante.addEmploye(
 					resultats.getInt("id"),
 					resultats.getString("nomEmploye"),
 					resultats.getString("prenomEmploye"),
 					resultats.getString("mail"),
 					resultats.getString("passwd"),
 					LocalDate.parse(resultats.getString("datearv")),
-					resultats.getString("datedepart") != null ? LocalDate.parse(resultats.getString("datedepart")) : null,
-					resultats.getBoolean("Admin")
+					resultats.getString("datedepart") != null ?
+						LocalDate.parse(resultats.getString("datedepart")) : null,
+					resultats.getInt("id") == resultats.getInt("admin_id")
 				);
 			}
 		}
