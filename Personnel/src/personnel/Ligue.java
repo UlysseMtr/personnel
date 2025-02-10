@@ -74,9 +74,10 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * Retourne l'administrateur de la ligue.
 	 * @return l'administrateur de la ligue.
 	 */
-
+	
 	public Employe getAdministrateur()
 	{
+		
 		return administrateur;
 	}
 

@@ -42,44 +42,68 @@ public class JDBC implements Passerelle
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try
 		{
-			String requeteRoot = "select * from employe where ID_Ligue is null";
-			Statement instructionRoot = connection.createStatement();
-			ResultSet root = instructionRoot.executeQuery(requeteRoot);
-			gestionPersonnel.chargerRoot(root);
-			String requete = "SELECT l.*, e.*, l.ID_Admin as admin_id " +
-							"FROM ligue l " +
-							"INNER JOIN employe e ON l.ID_Ligue = e.ID_Ligue " +
-							"ORDER BY l.ID_Ligue";
-			Statement instruction = connection.createStatement();
-			ResultSet resultats = instruction.executeQuery(requete);
+			PreparedStatement instructionRoot;
+			instructionRoot = connection.prepareStatement("select id_employe, prenomEmploye, nomEmploye, ID_Ligue, passwd from employe where id_ligue is null and id_employe = 1");
+			ResultSet root = instructionRoot.executeQuery();
+
+			if (!root.next()) {
+				gestionPersonnel.addRoot("roverveot", null, null, "toor",
+					LocalDate.parse("2020-12-12"), LocalDate.parse("2020-12-13"));
+			} else {
+				gestionPersonnel.addRoot(root.getInt("id_employe"), root.getString("nomEmploye"),
+					null, null, root.getString("passwd"),
+					LocalDate.parse("2020-12-12"), LocalDate.parse("2020-12-13"));
+			}
+
+			PreparedStatement instruction;
+			instruction = connection.prepareStatement("select * from employe");
+			ResultSet resultats = instruction.executeQuery();
 
 			Ligue ligueCourante = null;
 			int idLiguePrecedente = -1;
 
 			while (resultats.next())
 			{
+
 				int idLigue = resultats.getInt("ID_Ligue");
 				if (idLigue != idLiguePrecedente)
 				{
-					ligueCourante = gestionPersonnel.addLigue(idLigue, resultats.getString("nomLigue"));
-					idLiguePrecedente = idLigue;
+					PreparedStatement instruction2;
+					instruction2 = connection.prepareStatement("select * from ligue where id_ligue = (?)");
+					instruction2.setInt(1, idLigue);
+					ResultSet res = instruction2.executeQuery();
+
+
+					if(res.next()){
+						String Ligue = res.getString(2);
+						ligueCourante = gestionPersonnel.addLigue(idLigue,Ligue);
+						idLiguePrecedente = idLigue;
+						Employe employe = ligueCourante.addEmploye(
+								resultats.getInt("id_employe"),
+								resultats.getString("nomEmploye"),
+								resultats.getString("prenomEmploye"),
+								resultats.getString("mail"),
+								resultats.getString("passwd"),
+								LocalDate.parse(resultats.getString("datearv")),
+								resultats.getString("datedepart") != null ?
+									LocalDate.parse(resultats.getString("datedepart")) : null,
+								resultats.getBoolean("Admin")
+
+							);
+						if (resultats.getBoolean("Admin"))
+						{
+							ligueCourante.setAdministrateur(employe);
+						}
+					}
 				}
 
-				Employe employe = ligueCourante.addEmploye(
-					resultats.getInt("id"),
-					resultats.getString("nomEmploye"),
-					resultats.getString("prenomEmploye"),
-					resultats.getString("mail"),
-					resultats.getString("passwd"),
-					LocalDate.parse(resultats.getString("datearv")),
-					resultats.getString("datedepart") != null ?
-						LocalDate.parse(resultats.getString("datedepart")) : null,
-					resultats.getInt("id") == resultats.getInt("admin_id")
-				);
+
+
 			}
 		}
 		catch (SQLException e)
 		{
+			e.printStackTrace();
 			throw new SauvegardeImpossible(e);
 		}
 		return gestionPersonnel;
@@ -148,11 +172,14 @@ public class JDBC implements Passerelle
 			else
 				instruction.setNull(6, java.sql.Types.VARCHAR);
 
-			instruction.setBoolean(7, employe.estAdmin(employe.getLigue()));
-			if (employe.getLigue() == null)
+			if (employe.getLigue() == null) {
 				instruction.setNull(8, java.sql.Types.INTEGER);
-			else
+				instruction.setBoolean(7,false);
+			}
+			else {
 				instruction.setInt(8, employe.getLigue().getIdLigue());
+				instruction.setBoolean(7, employe.estAdmin(employe.getLigue()));
+			}
 			instruction.executeUpdate();
 			ResultSet id = instruction.getGeneratedKeys();
 			id.next();

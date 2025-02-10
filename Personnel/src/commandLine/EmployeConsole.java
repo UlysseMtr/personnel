@@ -48,6 +48,7 @@ public class EmployeConsole
 	            }
 	        });
 	}
+	
 
 	private Option modifierDateDepart(Employe employe) {
 	    return new Option("Changer date de départ", "d", 

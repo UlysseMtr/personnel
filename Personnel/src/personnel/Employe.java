@@ -16,8 +16,8 @@ public class Employe implements Serializable, Comparable<Employe>
 	private String nom, prenom, password, mail;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
-	private LocalDate dateArrivee = LocalDate.of(0000, 01, 01);
-	private LocalDate dateDepart = LocalDate.of(0000, 01, 01);
+	private LocalDate dateArrivee;
+	private LocalDate dateDepart;
 	private int id;
 
 
@@ -30,16 +30,11 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.mail = mail;
 		this.ligue = ligue;
 		this.password = password;
-		if (dateDepart.isBefore(dateArrivee)) throw new ExceptionDate();
+		if (dateDepart.isBefore(dateArrivee)) 
+			throw new ExceptionDate();
 		this.dateArrivee = dateArrivee;
 		this.dateDepart = dateDepart;
-		if (ligue == null && gestionPersonnel.getRoot() == null) {
-			try {
-				gestionPersonnel.addRoot(nom, prenom, mail, password, dateArrivee, dateDepart);
-			} catch (SauvegardeImpossible e) {
-				throw new SauvegardeImpossible(e);
-			}
-		}
+		this.id = gestionPersonnel.insert(this);
 	}
 
 	Employe(int id, GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom,
@@ -71,7 +66,7 @@ public class Employe implements Serializable, Comparable<Employe>
 
 	public boolean estAdmin(Ligue ligue)
 	{
-		return ligue.getAdministrateur() == this;
+		return ligue.getAdministrateur().getId() == this.getId();
 	}
 
 	/**
