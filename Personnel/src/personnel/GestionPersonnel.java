@@ -51,8 +51,6 @@ public class GestionPersonnel implements Serializable
 		if (gestionPersonnel != null)
 			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
 		ligues = new TreeSet<>();
-		new Employe(this, null, "root", "", "", "toor",
-			LocalDate.of(2000, 1, 1), LocalDate.of(2099, 12, 31));
 		gestionPersonnel = this;
 	}
 
@@ -137,20 +135,22 @@ public class GestionPersonnel implements Serializable
 			passerelle.update(employe);
 	}
 
+	//Lecture
 	public Employe addRoot(int id, String nom, String prenom, String mail, String password,
 		LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, ExceptionDate
 	{
 		Employe employe = new Employe(id, this, null, nom, prenom, mail, password, dateArrivee, dateDepart, true);
-		root = employe;
-		if (passerelle != null)
-			passerelle.insert(employe);
+		this.root = employe;
 		return employe;
 	}
-
+	
+	//creation
 	public Employe addRoot(String nom, String prenom, String mail, String password,
 		LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, ExceptionDate
 	{
-		return addRoot(-1, nom, prenom, mail, password, dateArrivee, dateDepart);
+		Employe employe = new Employe(this, null, nom, prenom, mail, password, dateArrivee, dateDepart);
+		this.root = employe;
+		return employe;
 	}
 
 	public void delete(Employe employe) throws SauvegardeImpossible
@@ -163,24 +163,5 @@ public class GestionPersonnel implements Serializable
 	{
 		if (passerelle != null)
 			passerelle.delete(ligue);
-	}
-
-	public void chargerRoot(ResultSet rootData) throws SQLException, SauvegardeImpossible, ExceptionDate
-	{
-		if (rootData.next()) {
-			addRoot(
-				rootData.getInt("id"),
-				rootData.getString("nomEmploye"),
-				rootData.getString("prenomEmploye"),
-				rootData.getString("mail"),
-				rootData.getString("passwd"),
-				LocalDate.parse(rootData.getString("datearv")),
-				rootData.getString("datedepart") != null ?
-					LocalDate.parse(rootData.getString("datedepart")) : null
-			);
-		} else {
-			addRoot("root", "", "", "toor",
-				LocalDate.of(2000, 1, 1), LocalDate.of(2099, 12, 31));
-		}
 	}
 }
